@@ -1,0 +1,144 @@
+.raiz {
+    -fx-background-color: transparent;
+    -fx-padding: 8;
+    -fx-font-family: "Cascadia Mono", "Consolas", "DejaVu Sans Mono", monospace;
+}
+
+/* Timer embaixo do robô: legível sobre qualquer fundo de tela graças ao contorno escuro. */
+.tempo-compacto {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e8f4ff;
+    -fx-effect: dropshadow(gaussian, #0b1017, 4, 0.9, 0, 0);
+}
+
+.tempo-compacto.hora-extra,
+.tempo-grande.hora-extra {
+    -fx-text-fill: #ff8c1a;
+}
+
+.painel {
+    -fx-background-color: #151c26ee;
+    -fx-background-radius: 14;
+    -fx-border-color: #2c3a4c;
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-padding: 12 14 12 14;
+    -fx-effect: dropshadow(gaussian, #00000088, 14, 0.2, 0, 3);
+}
+
+.badge {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 8 2 8;
+    -fx-background-radius: 8;
+    -fx-text-fill: #0b1017;
+}
+
+.badge.foco {
+    -fx-background-color: #4de3ff;
+}
+
+.badge.pausa {
+    -fx-background-color: #5dff8a;
+}
+
+.status {
+    -fx-font-size: 11px;
+    -fx-text-fill: #8a9bb0;
+}
+
+.tempo-grande {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e8f4ff;
+}
+
+.rotulo {
+    -fx-font-size: 11px;
+    -fx-text-fill: #9fb0c4;
+}
+
+.progress-bar {
+    -fx-pref-height: 10px;
+}
+
+.progress-bar > .track {
+    -fx-background-color: #26313d;
+    -fx-background-radius: 5;
+    -fx-background-insets: 0;
+}
+
+.progress-bar > .bar {
+    -fx-background-color: -fx-accent;
+    -fx-background-radius: 5;
+    -fx-background-insets: 0;
+    -fx-padding: 5;
+}
+
+.barra-temperatura {
+    -fx-accent: #ff8c1a;
+}
+
+.bolinha {
+    -fx-min-width: 10px;
+    -fx-min-height: 10px;
+    -fx-max-width: 10px;
+    -fx-max-height: 10px;
+    -fx-background-radius: 5;
+    -fx-background-color: #26313d;
+}
+
+.bolinha.cheia {
+    -fx-background-color: #4de3ff;
+}
+
+.button {
+    -fx-font-family: "Cascadia Mono", "Consolas", "DejaVu Sans Mono", monospace;
+    -fx-cursor: hand;
+    -fx-background-radius: 8;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.principal {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 7 10 7 10;
+    -fx-background-color: #2e7bd6;
+    -fx-text-fill: white;
+}
+
+.principal:hover {
+    -fx-background-color: #3a8cec;
+}
+
+.principal.chamativo {
+    -fx-background-color: #5dff8a;
+    -fx-text-fill: #0b1017;
+}
+
+.secundario {
+    -fx-font-size: 11px;
+    -fx-padding: 4 6 4 6;
+    -fx-background-color: #232e3b;
+    -fx-text-fill: #c9d6e3;
+}
+
+.secundario:hover {
+    -fx-background-color: #2f3d4e;
+}
+
+.context-menu {
+    -fx-background-color: #151c26;
+    -fx-background-radius: 8;
+}
+
+.context-menu .menu-item .label {
+    -fx-text-fill: #e8f4ff;
+    -fx-font-family: "Cascadia Mono", "Consolas", "DejaVu Sans Mono", monospace;
+}
+
+.context-menu .menu-item:focused {
+    -fx-background-color: #2e7bd6;
+}

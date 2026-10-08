@@ -32,21 +32,33 @@ public class ArquivoHistorico {
         if (!Files.exists(arquivo)) {
             return new Historico();
         }
-        Map<LocalDate, Integer> ciclos = new HashMap<>();
+        String conteudo;
         try {
-            for (String linha : Files.readAllLines(arquivo, StandardCharsets.UTF_8)) {
-                String[] partes = linha.strip().split(";");
-                if (partes.length != 2) {
-                    continue;
-                }
-                try {
-                    ciclos.merge(LocalDate.parse(partes[0]), Integer.parseInt(partes[1]), Integer::sum);
-                } catch (DateTimeParseException | NumberFormatException e) {
-                    // linha inválida: ignora
-                }
-            }
+            // new String(...) troca bytes inválidos por U+FFFD em vez de lançar exceção como
+            // readAllLines: um byte estragado custa só a linha dele
+            conteudo = new String(Files.readAllBytes(arquivo), StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new UncheckedIOException("Não foi possível ler " + arquivo, e);
+        }
+        // o Bloco de Notas pode gravar um BOM no início, que grudaria na data da primeira linha
+        if (conteudo.startsWith("﻿")) {
+            conteudo = conteudo.substring(1);
+        }
+
+        Map<LocalDate, Integer> ciclos = new HashMap<>();
+        for (String linha : conteudo.split("\\R")) {
+            String[] partes = linha.strip().split(";");
+            if (partes.length != 2) {
+                continue;
+            }
+            try {
+                int quantidade = Integer.parseInt(partes[1]);
+                if (quantidade > 0) {
+                    ciclos.merge(LocalDate.parse(partes[0]), quantidade, Integer::sum);
+                }
+            } catch (DateTimeParseException | NumberFormatException e) {
+                // linha inválida: ignora
+            }
         }
         return new Historico(ciclos);
     }

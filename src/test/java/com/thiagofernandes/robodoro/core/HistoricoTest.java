@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
@@ -84,5 +85,51 @@ class HistoricoTest {
         assertEquals(3, h.ciclosEm(HOJE));
         assertEquals(1, h.ciclosEm(LocalDate.of(2026, 9, 28)));
         assertEquals(0, h.ciclosEm(LocalDate.of(2026, 9, 29)));
+    }
+
+    @Test
+    void arquivoSalvoComBomNaoPerdeOPrimeiroDia(@TempDir Path pasta) throws IOException {
+        // o Bloco de Notas antigo grava UTF-8 com BOM (EF BB BF) no começo do arquivo
+        Path caminho = pasta.resolve("historico.txt");
+        Files.write(caminho, "﻿2026-09-30;3\n2026-09-29;2\n".getBytes(StandardCharsets.UTF_8));
+
+        Historico h = new ArquivoHistorico(caminho).carregar();
+
+        assertEquals(3, h.ciclosEm(HOJE));
+        assertEquals(2, h.ciclosEm(HOJE.minusDays(1)));
+    }
+
+    @Test
+    void byteInvalidoNoArquivoNaoImpedeOAppDeAbrir(@TempDir Path pasta) throws IOException {
+        Path caminho = pasta.resolve("historico.txt");
+        byte[] inicio = "2026-09-30;3\n".getBytes(StandardCharsets.UTF_8);
+        byte[] lixo = {(byte) 0xC3, (byte) 0x28, '\n'};   // sequência UTF-8 inválida
+        byte[] fim = "2026-09-28;1\n".getBytes(StandardCharsets.UTF_8);
+        Files.write(caminho, concatenar(inicio, lixo, fim));
+
+        Historico h = new ArquivoHistorico(caminho).carregar();
+
+        assertEquals(3, h.ciclosEm(HOJE));
+        assertEquals(1, h.ciclosEm(LocalDate.of(2026, 9, 28)));
+    }
+
+    @Test
+    void contagemZeroOuNegativaEhIgnorada(@TempDir Path pasta) throws IOException {
+        Path caminho = pasta.resolve("historico.txt");
+        Files.write(caminho, List.of("2026-09-30;-2", "2026-09-29;0", "2026-09-28;1"));
+
+        Historico h = new ArquivoHistorico(caminho).carregar();
+
+        assertEquals(0, h.ciclosEm(HOJE));
+        assertEquals(0, h.ciclosEm(HOJE.minusDays(1)));
+        assertEquals(1, h.ciclosEm(LocalDate.of(2026, 9, 28)));
+    }
+
+    private static byte[] concatenar(byte[]... partes) {
+        java.io.ByteArrayOutputStream saida = new java.io.ByteArrayOutputStream();
+        for (byte[] parte : partes) {
+            saida.writeBytes(parte);
+        }
+        return saida.toByteArray();
     }
 }

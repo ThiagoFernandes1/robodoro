@@ -155,7 +155,7 @@ Detalhes que valem citar:
 ./mvnw verify
 ```
 
-São 55 testes. Entre eles, um pegou um bug real durante o desenvolvimento: a próxima fase era calculada depois de o estado "aguardando" ser limpo, e isso mandava o usuário para a pausa longa já no primeiro ciclo.
+São 58 testes. Entre eles, um pegou um bug real durante o desenvolvimento: a próxima fase era calculada depois de o estado "aguardando" ser limpo, e isso mandava o usuário para a pausa longa já no primeiro ciclo.
 
 ## Inspiração
 
